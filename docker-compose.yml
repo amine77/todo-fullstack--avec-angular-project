@@ -51,7 +51,7 @@ services:
       - redis
       - kafka
 
-  # Frontend React
+  # Frontend Angular 20
   frontend:
     build: ./todo-frontend
     container_name: todo-ui

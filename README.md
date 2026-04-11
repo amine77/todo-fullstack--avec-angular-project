@@ -1,47 +1,167 @@
-# Todo App - Fullstack Architecture Hexagonale
+# Todo App — Fullstack Architecture Hexagonale
 
 🚀 **Projet de gestion de tâches (Todo List) moderne et complet**, construit avec les meilleures pratiques de l'architecture logicielle.
 
+---
+
 ## 🌟 Fonctionnalités
 
-*   🔐 **Authentification JWT** : Chaque utilisateur dispose de son propre espace de tâches.
-*   ✅ **Gestion des tâches** : Création, lecture, inversion du statut (cocher/décocher) et **suppression** de vos tâches !
-*   ⚡ **Performance** : Mise en cache agressive des listes de tâches via **Redis**.
-*   📝 **Audit Log Temps Réel** : Toute l'activité de votre Todo-List est tracée de manière asynchrone par un **Broker Apache Kafka** sans ralentir l'API principale.
-*   🎨 **Interface Utilisateur** : Design ultra-moderne (Glassmorphism, dégradés) utilisant **React** et **Bootstrap 5**.
+- 🔐 **Authentification JWT** : Chaque utilisateur dispose de son propre espace de tâches sécurisé.
+- ✅ **Gestion des tâches** : Création, lecture, inversion du statut (cocher/décocher) et suppression.
+- ⚡ **Performance** : Mise en cache des listes de tâches via **Redis**.
+- 📝 **Audit Log asynchrone** : Toute l'activité est tracée via **Apache Kafka** sans impacter l'API.
+- 🎨 **Interface moderne** : Design premium (glassmorphism, dégradés) avec **Angular 20** et **Bootstrap 5**.
+
+---
 
 ## 🏗️ Architecture
 
-Le backend applique les principes de l'**Architecture Hexagonale (Ports & Adapters)** :
-*   `domain` : Contient le cœur du métier (`Task`, `TaskService`) sans dépendance aux frameworks externes. Utilise les **Records Java 21**.
-*   `infrastructure` : Contient tous les adaptateurs (API REST, Base Postgres, Redis, Spring Security JWT et le **Moteur Kafka KRaft**).
+```
+todo-fullstack--avec-angular-project/
+├── todo-frontend/        # SPA Angular 20 (port 3001 en Docker)
+└── todo-backend/         # API REST Spring Boot — Architecture Hexagonale (port 8080)
+```
 
-## 🐳 Comment lancer le projet en local
+### Backend — Architecture Hexagonale (Ports & Adapters)
 
-C'est extrêmement simple grâce à Docker. L'environnement complet se déploiera en une seule commande !
+```
+todo-backend/src/main/java/com/example/todo/
+├── domain/
+│   ├── model/            # Task, TaskEvent (Records Java 21, sans dépendances externes)
+│   ├── ports/            # Interfaces : TaskRepository, AuditPublisher
+│   └── service/          # TaskService (logique métier pure)
+└── infrastructure/
+    ├── adapters/
+    │   ├── messaging/    # KafkaAuditConsumer, KafkaAuditPublisher
+    │   ├── persistence/  # PostgresTaskRepository, TaskEntity (JPA)
+    │   └── web/          # TaskController (REST), AuthController
+    └── config/           # Spring Security JWT, Redis, Kafka
+```
 
-1. Ouvrez un terminal à la racine du projet.
-2. Lancez l'infrastructure complète :
+### Frontend — Angular 20 Standalone
+
+```
+todo-frontend/src/app/
+├── core/
+│   ├── services/         # TaskService (HttpClient)
+│   ├── interceptors/     # authInterceptor (JWT automatique)
+│   └── guards/           # authGuard (protection de /tasks)
+└── features/
+    ├── login/            # LoginComponent (Reactive Form)
+    └── tasks/            # TaskListComponent (Signals + CRUD)
+```
+
+---
+
+## 🛠️ Stack technique
+
+| Couche | Technologie |
+|---|---|
+| **Frontend** | Angular 20 · Bootstrap 5 · Angular Signals · Karma/Jasmine |
+| **Backend** | Spring Boot 3 · Spring Security JWT · Architecture Hexagonale |
+| **Base de données** | PostgreSQL 16 |
+| **Cache** | Redis 7 |
+| **Message Broker** | Apache Kafka 3.7 (mode KRaft, sans Zookeeper) |
+| **Conteneurisation** | Docker · Docker Compose · Nginx |
+
+---
+
+## 🐳 Lancer le projet en local (Docker)
+
+> **Pré-requis** : Docker Desktop installé et en cours d'exécution.
+
 ```bash
+# Depuis la racine du projet
 docker-compose up --build -d
 ```
-3. L'application est prête ! Ouvrez votre navigateur sur **http://localhost:3001**
-4. Connectez-vous avec n'importe quel pseudo pour démarrer.
 
-*Pour éteindre l'application proprement : `docker-compose down`*
+| Service | URL |
+|---|---|
+| 🎨 Frontend Angular | http://localhost:3001 |
+| ⚙️ API Backend | http://localhost:8080 |
+| 🐘 PostgreSQL | localhost:5432 |
+| 🔴 Redis | localhost:6379 |
+| 📨 Kafka | localhost:9092 |
+
+**Connexion** : entrez n'importe quel pseudo dans le formulaire de login.
+
+```bash
+# Arrêter proprement tous les services
+docker-compose down
+```
+
+---
+
+## 💻 Développement local (sans Docker)
+
+### Backend
+
+```bash
+cd todo-backend
+
+# Pré-requis : Java 21, Maven 3.9+
+# Démarrer d'abord PostgreSQL, Redis et Kafka (via Docker ou en local)
+
+mvn spring-boot:run
+# → API disponible sur http://localhost:8080
+```
+
+### Frontend
+
+```bash
+cd todo-frontend
+
+# Pré-requis : Node.js ≥ 20, Angular CLI
+npm install
+npm start
+# → App disponible sur http://localhost:4200
+```
+
+---
 
 ## 🧪 Tests
 
-Lancer les tests (Qualité, JUnit et Cucumber) :
+### Frontend (Angular — Karma/Jasmine)
+
+```bash
+cd todo-frontend
+ng test --watch=false --browsers=ChromeHeadless
+# → 61 tests : 11 (service) + 4 (guard) + 14 (login) + 22 (task-list) + 2 (app)
+```
+
+### Backend (JUnit 5 + Cucumber BDD)
+
 ```bash
 cd todo-backend
 mvn test
+# → Tests unitaires JUnit + scénarios Cucumber (BDD)
 ```
 
-## 🔌 API Reference (Postman/Curl)
+---
 
-*   `POST /api/auth/login` : Envoyer `{"username": "votre_pseudo"}` pour récupérer un Token.
-*   `GET /api/tasks` : Lister les tâches (Nécessite Header `Authorization: Bearer <token>`).
-*   `POST /api/tasks` : Créer une tâche.
-*   `PUT /api/tasks/{id}/toggle` : Cocher/décocher une tâche.
-*   `DELETE /api/tasks/{id}` : Supprimer une tâche.
+## 🔌 API Reference
+
+### Authentification
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{ "username": "votre_pseudo" }
+```
+→ Retourne `{ "token": "eyJ..." }`
+
+### Tâches (requiert `Authorization: Bearer <token>`)
+
+| Méthode | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/tasks` | Liste toutes les tâches |
+| `POST` | `/api/tasks` | Crée une tâche (body: `text/plain`) |
+| `PUT` | `/api/tasks/{id}/toggle` | Bascule completed/non-completed |
+| `DELETE` | `/api/tasks/{id}` | Supprime une tâche |
+
+---
+
+## 🔗 Dépôt GitHub
+
+[https://github.com/amine77/todo-fullstack--avec-angular-project](https://github.com/amine77/todo-fullstack--avec-angular-project)

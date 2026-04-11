@@ -1,0 +1,19 @@
+# .dockerignore — Frontend Angular
+#
+# Exclut les fichiers inutiles du contexte de build Docker.
+# Sans ce fichier, node_modules (200+ MB) est envoyé au daemon Docker,
+# ce qui ralentit le build et peut causer des conflits avec npm ci.
+
+# Dépendances — régénérées par npm ci dans le conteneur
+node_modules/
+
+# Build output — régénéré par ng build dans le conteneur
+dist/
+
+# Cache Angular CLI
+.angular/
+
+# Fichiers de développement inutiles en production
+.vscode/
+.editorconfig
+*.md
