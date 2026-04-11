@@ -7,6 +7,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
+import java.util.UUID;
+
 @Component
 public class PostgresTaskRepository implements TaskRepository {
     
@@ -31,5 +33,16 @@ public class PostgresTaskRepository implements TaskRepository {
         return jpaRepository.findByUserId(userId).stream()
                 .map(TaskEntity::toDomain)
                 .toList();
+    }
+
+    @Override
+    public java.util.Optional<Task> findById(UUID id) {
+        return jpaRepository.findById(id).map(TaskEntity::toDomain);
+    }
+
+    @Override
+    @CacheEvict(value = "tasks", key = "#task.userId()")
+    public void delete(Task task) {
+        jpaRepository.deleteById(task.id());
     }
 }

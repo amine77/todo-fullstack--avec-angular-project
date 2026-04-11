@@ -21,5 +21,7 @@ export const getTasks = () => api.get('/tasks');
 export const createTask = (title) => api.post('/tasks', title, {
     headers: { 'Content-Type': 'text/plain' }
 });
+export const toggleTask = (id) => api.put(`/tasks/${id}/toggle`);
+export const deleteTask = (id) => api.delete(`/tasks/${id}`);
 
 export default api;

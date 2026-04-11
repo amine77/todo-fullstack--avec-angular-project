@@ -22,4 +22,21 @@ public class TaskService {
     public List<Task> getTasksForUser(String userId) {
         return taskRepository.findAllByUserId(userId);
     }
+
+    public Task toggleTask(UUID taskId, String userId) {
+        return taskRepository.findById(taskId)
+                .filter(task -> task.userId().equals(userId))
+                .map(Task::toggle)
+                .map(taskRepository::save)
+                .orElseThrow(() -> new IllegalArgumentException("Tâche introuvable ou non autorisée"));
+    }
+
+    public void deleteTask(UUID taskId, String userId) {
+        taskRepository.findById(taskId)
+                .filter(task -> task.userId().equals(userId))
+                .ifPresentOrElse(
+                        taskRepository::delete,
+                        () -> { throw new IllegalArgumentException("Tâche introuvable ou non autorisée"); }
+                );
+    }
 }

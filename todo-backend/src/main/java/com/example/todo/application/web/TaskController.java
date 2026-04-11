@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
-@CrossOrigin(origins = "http://localhost:3000") // Pour le futur Front-end React
 public class TaskController {
 
     private final TaskService taskService;
@@ -33,5 +32,18 @@ public class TaskController {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         // Ici on appellerait une méthode du service pour lister les tâches
         return ResponseEntity.ok(taskService.getTasksForUser(userId));
+    }
+
+    @PutMapping("/{id}/toggle")
+    public ResponseEntity<Task> toggleTask(@PathVariable java.util.UUID id) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(taskService.toggleTask(id, userId));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable java.util.UUID id) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        taskService.deleteTask(id, userId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface TaskRepository {
     Task save(Task task);
     List<Task> findAllByUserId(String userId);
+    Optional<Task> findById(UUID id);
+    void delete(Task task);
 }
