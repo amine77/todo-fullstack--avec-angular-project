@@ -7,13 +7,14 @@
 *   🔐 **Authentification JWT** : Chaque utilisateur dispose de son propre espace de tâches.
 *   ✅ **Gestion des tâches** : Création, lecture, inversion du statut (cocher/décocher) et **suppression** de vos tâches !
 *   ⚡ **Performance** : Mise en cache agressive des listes de tâches via **Redis**.
+*   📝 **Audit Log Temps Réel** : Toute l'activité de votre Todo-List est tracée de manière asynchrone par un **Broker Apache Kafka** sans ralentir l'API principale.
 *   🎨 **Interface Utilisateur** : Design ultra-moderne (Glassmorphism, dégradés) utilisant **React** et **Bootstrap 5**.
 
 ## 🏗️ Architecture
 
 Le backend applique les principes de l'**Architecture Hexagonale (Ports & Adapters)** :
 *   `domain` : Contient le cœur du métier (`Task`, `TaskService`) sans dépendance aux frameworks externes. Utilise les **Records Java 21**.
-*   `infrastructure` : Contient tous les adaptateurs (API REST, Base Postgres, Redis, Spring Security JWT).
+*   `infrastructure` : Contient tous les adaptateurs (API REST, Base Postgres, Redis, Spring Security JWT et le **Moteur Kafka KRaft**).
 
 ## 🐳 Comment lancer le projet en local
 
