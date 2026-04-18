@@ -81,7 +81,7 @@ describe('TaskService', () => {
       });
 
       // Intercepter la requête et vérifier ses caractéristiques
-      const req = httpMock.expectOne('http://localhost:8080/api/auth/login');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/auth/login');
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual({ username: 'alice', password: 'password' });
 
@@ -97,7 +97,7 @@ describe('TaskService', () => {
       });
 
       // Simuler une réponse d'erreur 401 Unauthorized
-      const req = httpMock.expectOne('http://localhost:8080/api/auth/login');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/auth/login');
       req.flush('Unauthorized', { status: 401, statusText: 'Unauthorized' });
     });
   });
@@ -113,7 +113,7 @@ describe('TaskService', () => {
         expect(tasks[1].completed).toBeTrue();
       });
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks');
       expect(req.request.method).toBe('GET');
       req.flush(MOCK_TASKS);
     });
@@ -124,7 +124,7 @@ describe('TaskService', () => {
         expect(tasks.length).toBe(0);
       });
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks');
       req.flush([]);
     });
 
@@ -134,7 +134,7 @@ describe('TaskService', () => {
         error: (err) => expect(err.status).toBe(403),
       });
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks');
       req.flush('Forbidden', { status: 403, statusText: 'Forbidden' });
     });
   });
@@ -152,7 +152,7 @@ describe('TaskService', () => {
         expect(task.completed).toBeFalse();
       });
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks');
       expect(req.request.method).toBe('POST');
       // Vérification cruciale : le backend attend text/plain (pas JSON)
       expect(req.request.headers.get('Content-Type')).toContain('text/plain');
@@ -173,7 +173,7 @@ describe('TaskService', () => {
         expect(task.completed).toBeTrue();
       });
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks/1/toggle');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks/1/toggle');
       expect(req.request.method).toBe('PUT');
       req.flush(updatedTask);
     });
@@ -181,7 +181,7 @@ describe('TaskService', () => {
     it('devrait utiliser le bon id dans l\'URL pour toggle', () => {
       service.toggleTask(42).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks/42/toggle');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks/42/toggle');
       expect(req.request.url).toContain('/42/toggle');
       req.flush({ id: 42, title: 'Test', completed: true });
     });
@@ -198,7 +198,7 @@ describe('TaskService', () => {
         deleteCalled = true;
       });
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks/1');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks/1');
       expect(req.request.method).toBe('DELETE');
 
       // Le backend retourne 204 No Content → flush null
@@ -210,7 +210,7 @@ describe('TaskService', () => {
     it('devrait utiliser le bon id dans l\'URL pour delete', () => {
       service.deleteTask(99).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:8080/api/tasks/99');
+      const req = httpMock.expectOne('https://todo-fullstack-avec-angular-project.onrender.com/api/tasks/99');
       expect(req.request.url).toContain('/99');
       req.flush(null);
     });

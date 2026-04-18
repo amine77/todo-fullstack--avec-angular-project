@@ -35,11 +35,9 @@ export interface LoginResponse {
 export class TaskService {
   /** 
    * URL de base de l'API REST du backend Spring Boot.
-   * ⚠️ IMPORTANT POUR LE DEPLOIEMENT (Render.com) :
-   * En local, gardez 'http://localhost:8080/api'.
-   * En production, remplacez par l'URL de votre Web Service Backend métier (ex: 'https://todo-backend-xxx.onrender.com/api').
+   * Modifié pour cibler le serveur de production Render.com.
    */
-  private readonly apiUrl = 'http://localhost:8080/api';
+  private readonly apiUrl = 'https://todo-fullstack-avec-angular-project.onrender.com/api';
 
   /** HttpClient injecté via la nouvelle API inject() d'Angular */
   private readonly http = inject(HttpClient);
