@@ -37,7 +37,7 @@ export class TaskService {
    * URL de base de l'API REST du backend Spring Boot.
    * Modifié pour cibler le serveur de production Render.com.
    */
-  private readonly apiUrl = 'https://todo-fullstack-avec-angular-project.onrender.com/api';
+  private readonly apiUrl = 'https://todo-backend-latest-zzys.onrender.com/api';
 
   /** HttpClient injecté via la nouvelle API inject() d'Angular */
   private readonly http = inject(HttpClient);
