@@ -173,3 +173,24 @@ Content-Type: application/json
 ## 🔗 Dépôt GitHub
 
 [https://github.com/amine77/todo-fullstack--avec-angular-project](https://github.com/amine77/todo-fullstack--avec-angular-project)
+
+---
+
+## 🚀 CI / CD & Déploiement (Render.com)
+
+Le projet intègre un pipeline complet avec **GitHub Actions** (`.github/workflows/ci-cd.yml`) permettant :
+1. De lancer l'intégralité des tests à chaque `push` :
+   - Pipeline **Backend** (Maven, JUnit, Cucumber BDD + infrastructure Kafka/Redis via Docker).
+   - Pipeline **Frontend** (Angular, Jasmine, Cypress).
+2. De construire automatiquement les images **Docker** locales.
+3. De les publier sur **GitHub Container Registry (GHCR)**.
+4. De déclencher automatiquement le redéploiement sur **Render.com**.
+
+### Configuration dans GitHub
+Pour activer le déploiement continu vers Render.com, configurez les **Secrets** suivants dans les paramètres de votre dépôt GitHub (`Settings > Secrets and variables > Actions`) :
+
+- `RENDER_DEPLOY_HOOK_BACKEND` : L'URL de votre Web Hook de déploiement Render (Service Web Backend).
+- `RENDER_DEPLOY_HOOK_FRONTEND` : L'URL de votre Web Hook de déploiement Render (Service Web Frontend).
+
+> [!TIP]
+> Sur **Render.com**, créez deux "Web Services" utilisant la source "Docker" et connectés à votre Container Registry GitHub pour récupérer `ghcr.io/votre_depot/todo-backend:latest` et `todo-frontend:latest`. Récupérez ensuite le lien du "Deploy Hook" fourni par Render.
