@@ -138,6 +138,24 @@ ng test --watch=false --browsers=ChromeHeadless
 
 ---
 
+## 🎭 Tests E2E (Cypress)
+
+Les tests de bout en bout sont implémentés avec **Cypress**. Les appels API de l'application vers le backend sont "mockés" (simulés via `cy.intercept`), ce qui permet d'exécuter ces scénarios de test rapidement, sans avoir besoin de démarrer le backend Java ou d'initialiser la base de données.
+
+```bash
+# Ouvrir l'interface UI de Cypress (mode interactif)
+npm run e2e
+
+# Lancer les tests en mode headless (sans interface graphique, idéal CI)
+npx cypress run
+```
+
+### Scénarios couverts :
+- `auth.cy.ts` : Vérification du flux d'authentification complet, incluant la gestion des erreurs de connexion, la création du JWT local, et la protection des URLs par le Router.
+- `tasks.cy.ts` : Parcours utilisateur complet pour la gestion des tâches (CRUD complet), interaction fluide, et bouton de déconnexion.
+
+---
+
 ## 🐳 Déploiement Docker
 
 Le frontend est conteneurisé avec un build multi-stages :

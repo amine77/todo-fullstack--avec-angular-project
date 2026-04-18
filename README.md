@@ -121,12 +121,20 @@ npm start
 
 ## 🧪 Tests
 
-### Frontend (Angular — Karma/Jasmine)
+### Frontend — Tests Unitaires (Karma/Jasmine)
 
 ```bash
 cd todo-frontend
 ng test --watch=false --browsers=ChromeHeadless
-# → 61 tests : 11 (service) + 4 (guard) + 14 (login) + 22 (task-list) + 2 (app)
+# → Tests unitaires des composants, services et guards
+```
+
+### Frontend — Tests E2E (Cypress)
+
+```bash
+cd todo-frontend
+npm run e2e
+# → Lance les scénarios de bout en bout (mocking du backend inclus)
 ```
 
 ### Backend (JUnit 5 + Cucumber BDD)
@@ -134,7 +142,7 @@ ng test --watch=false --browsers=ChromeHeadless
 ```bash
 cd todo-backend
 mvn test
-# → Tests unitaires JUnit + scénarios Cucumber (BDD)
+# → Tests unitaires JUnit + scénarios d'intégration Cucumber (BDD)
 ```
 
 ---
